@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anonymous Messages</title>
+<style>
+body { font-family: Arial; background:#f0f2f5; margin:0; text-align:center;}
+.container { max-width:400px; margin:50px auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+input, textarea, button { width:90%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #ddd;}
+button { background:#4a90e2; color:white; border:none; cursor:pointer;}
+button:hover { background:#357ABD;}
+.message { background:#f1f1f1; padding:10px; border-radius:8px; margin-bottom:10px; text-align:left;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Anonymous Messages</h1>
+
+<!-- Signup/Login -->
+<form action="/register" method="POST">
+<input type="text" name="username" placeholder="Username" required><br>
+<input type="password" name="password" placeholder="Password" required><br>
+<button type="submit">Sign Up</button>
+</form>
+
+<form action="/login" method="POST">
+<input type="text" name="username" placeholder="Username" required><br>
+<input type="password" name="password" placeholder="Password" required><br>
+<button type="submit">Login</button>
+</form>
+
+<!-- Dashboard -->
+<div id="dashboard" style="display:block;">
+<h2>Welcome, __USERNAME__</h2>
+<p>Share your link:</p>
+<div id="link-box">https://yourapp.onrender.com/message/__USERNAME__</div>
+<button onclick="copyLink()">Copy Link</button>
+
+<h3>Messages</h3>
+<div id="messages"><!--USER_MESSAGES--></div>
+</div>
+</div>
+
+<script>
+function copyLink(){
+  const text = document.getElementById("link-box").innerText;
+  navigator.clipboard.writeText(text).then(()=>alert("Link copied!"));
+}
+</script>
+</body>
+</html>
