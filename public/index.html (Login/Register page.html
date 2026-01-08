@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anonymous Messenger</title>
+<style>
+body { font-family: Arial; background:#f0f2f5; margin:0; text-align:center;}
+.container { max-width:400px; margin:50px auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+input, button { width:90%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #ddd;}
+button { background:#4a90e2; color:white; border:none; cursor:pointer;}
+button:hover { background:#357ABD;}
+.messages { margin-top:20px; text-align:left;}
+.message { background:#f1f1f1; padding:10px; border-radius:8px; margin-bottom:10px; }
+a { color:#4a90e2; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Anonymous Messenger</h1>
+
+<p>Enter your username to view messages or share your link:</p>
+<input type="text" id="username" placeholder="Your username">
+<button onclick="goToDashboard()">Go</button>
+
+<div id="dashboard" style="display:none;">
+<h2 id="welcome"></h2>
+<p>Share this link to get anonymous messages:</p>
+<div id="link-box"></div>
+<button onclick="copyLink()">Copy Link</button>
+
+<h3>Recent Messages</h3>
+<div id="messages" class="messages"></div>
+</div>
+</div>
+
+<script>
+function goToDashboard(){
+  const username = document.getElementById("username").value.trim();
+  if(!username) return alert("Enter your username");
+  document.getElementById("welcome").innerText = `Messages for ${username}`;
+  document.getElementById("link-box").innerText = `${window.location.origin}/message/${username}`;
+  document.getElementById("dashboard").style.display = "block";
+  fetchMessages(username);
+  setInterval(()=>fetchMessages(username),2000);
+}
+
+async function fetchMessages(username){
+  const res = await fetch(`/messages/${username}`);
+  const data = await res.json();
+  const container = document.getElementById("messages");
+  container.innerHTML = "";
+  data.forEach(m=>{
+    const div = document.createElement("div");
+    div.className="message";
+    div.textContent = m.message + " (" + m.timestamp + ")";
+    container.appendChild(div);
+  });
+}
+
+function copyLink(){
+  const link = document.getElementById("link-box").innerText;
+  navigator.clipboard.writeText(link).then(()=>alert("Link copied!"));
+}
+</script>
+</body>
+</html>
